@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/stylesheet.css">
+<title>Chatアプリ</title>
+</head>
+<body>
+
+<!-- コンテンツ表示画面 -->
+<div id="form">
+    <div>名前<input type="text" id="uname"></div>
+    <div id="char_img_wrapper">
+        <ul>
+            <li class="imgs" data-img="0"><img src="imgs/buke.png" alt="ブーケ" id="buke"></li>
+            <li class="imgs" data-img="1"><img src="imgs/caram.png" alt="クラム" id="caram"></li>
+            <li class="imgs" data-img="2"><img src="imgs/tuku.jpg" alt="ツク" id="tuku"></li>
+        </ul>
+    </div>
+    <div>
+        <textarea id="text" cols="30" rows="10"></textarea>
+        <button id="send">送信</button>
+
+    </div>
+</div>
+</frame>
+
+<div id="display">
+<!-- <div id="display" style="height:300px; overflow:auto; border:1px solid red;"> -->
+    <div id="output"></div>
+    <a name="msg_bottom" id="msg_bottom">---メッセージの最後です---</a>
+</div>
+
+<!--/ コンテンツ表示画面 -->
+
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- JQuery -->
+
+
+<!--** 以下Firebase **-->
+<!-- The core Firebase JS SDK is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/7.20.0/firebase.js"></script>
+
+<!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+
+<script>
+  // Your web app's Firebase configuration
+ 
+
+ 
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  const ref = firebase.database().ref(); //ref()=「ユニークキーを自動的に振る」という意味
+
+// アイコン処理
+  let char=0
+  const img = ["buke.png","caram.png","tuku.jpg"];
+  $(".imgs").on('click',function(){
+    char = $(this).attr("data-img");
+  });
+
+  $("#buke").on('click',function(){
+      $("#buke").css('border','solid','1px');
+      $("#caram").css('border','none');
+      $("#tuku").css('border','none');
+  });
+  $("#caram").on('click',function(){
+      $("#caram").css('border','solid','1px');
+      $("#buke").css('border','none');
+      $("#tuku").css('border','none');
+  });
+  $("#tuku").on('click',function(){
+      $("#tuku").css('border','solid','1px');
+      $("#buke").css('border','none');
+      $("#caram").css('border','none');
+  });
+
+//関数定義
+function send(){
+    const uname = $("#uname").val();
+    const text = $("#text").val();
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = now.getMonth()+1;
+        const d = now.getDate();
+        const w = now.getDay();
+        const wd = ['日','月','火','水','木','金','土'];
+        const h = now.getHours();
+        const mi = now.getMinutes();
+        const s = now.getSeconds();
+    const now_date = y+'/'+m+'/'+d+'('+wd[w]+')'+h+':'+mi+':'+s;
+    const msg = {
+        uname:uname,
+        text:text,
+        time:now_date,
+        icon:char
+    }
+    ref.push(msg); //setにすると決まった名前、pushはユニークキーで保存
+};
+
+//   文字を送信
+$('#send').on('click',function(){
+    send();
+    $("#text").val('');
+    $(window).scrollTop($('#display').get(0).scrollHeight);
+});
+
+// 受信処理
+ref.on("child_added",function(data){
+    const v = data.val(); //送信されたオブジェクトを取得
+    const k = data.key; //ユニークキーの取得
+    const h = '<div><div class="talk_head"><img src="imgs/'+img[v.icon]+'"><div class="talk_name">'+v.uname+'</div></div><div class="tri"></div><div class="talk_text"><p>'+v.text+'</p></div><div class="talk_bottom"><div class="talk_time">'+v.time+'</div><button  class="del" id="'+k+'">'+"削除"+'</button></div></div>';
+    $('#output').append(h);
+
+    // メッセージ１件削除
+    $(".del").on('click',function(){
+    const del_key = $(this).attr('id');
+    // const result = confirm('このメッセージを削除していいですか？');//なぜかメッセージが複数現れるため未実装
+        // if(result){
+        ref.child(del_key).remove();
+        location.reload();
+        // }
+    })
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+body {
+    margin: 0 0 0 0;
+    background-image: url("../imgs/background118.jpg");
+}
+
+a {
+    text-decoration: none;
+}
+#form {
+    width: 100%;
+    padding: 20px 10px;
+    position: fixed;
+    background-color: #FFFFBB;
+    border-bottom: solid 1px;
+}
+
+#char_img_wrapper {
+    width: 200px;
+}
+#display {
+    width: 100%;
+    padding: 300px 10px 0 10px;
+}
+ul {
+    display: flex;
+    justify-content: space-evenly;
+    list-style: none;
+    padding: 0 0 0 0;
+    margin: 10px 0px 5px 0px;
+}
+
+img {
+    width: 50px;
+    height: auto;
+    border-radius: 50%;
+}
+
+img:hover {
+    cursor: pointer;
+    opacity: 50%;
+}
+
+.talk_head {
+    display: flex;
+}
+
+.talk_name {
+    padding: 15px 0 0 10px;
+}
+
+.tri {
+    width: 0px;
+    height: 0px;
+    margin: 5px auto 0 15px;
+    border-right: 10px solid transparent;
+    border-bottom: 15px solid #CCFFFF;
+    border-left: 10px solid transparent;
+}
+
+.talk_text {
+    width: 400px;
+    min-height: 35px;
+    background-color: #CCFFFF;
+    border-radius: 5px;
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+}
+
+.talk_text p {
+    margin: 0 0 0 0;
+    padding:5px;
+}
+
+.talk_bottom {
+    display: flex;
+  }
+  
+  .talk_time {
+    margin: 2px 0 0 0;
+    padding:5px;
+  }
+  
+  .del {
+    margin: 5px 0 5px 10px;
+    padding: 0 5px;
+  }
